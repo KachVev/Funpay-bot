@@ -23,6 +23,11 @@ subprojects {
 
 dependencies {
     implementation("com.charleskorn.kaml:kaml:0.74.0")
+    implementation("org.slf4j:slf4j-api:2.0.17")
+    implementation("ch.qos.logback:logback-classic:1.5.18")
+
+
+
     implementation(project(":extensions:files"))
     implementation(project(":extensions:profiler"))
 }

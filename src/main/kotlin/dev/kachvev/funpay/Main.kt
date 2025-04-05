@@ -3,8 +3,11 @@ package dev.kachvev.funpay
 import dev.kachvev.extention.profile.Profiler
 import dev.kachvev.funpay.module.ProductAutoCreateModule
 import dev.kachvev.funpay.module.api.ApplicationModule
+import org.slf4j.LoggerFactory
 
 fun main() {
+    val logger = LoggerFactory.getLogger("ProfilerLogger")
+
     val moduleLoading = Profiler("ModuleLoading")
     moduleLoading.start()
 
@@ -13,12 +16,12 @@ fun main() {
     )
 
     modules.forEach { module ->
-        val moduleStart = Profiler("Start module with name ${module.name}")
+        val moduleStart = Profiler("StartModule")
         moduleStart.start()
         module.start()
-        println("Module '${module.name}' took ${moduleStart.stop()} seconds")
+
+        logger.info("Module '${module.name}' took ${moduleStart.stop()} seconds")
     }
 
-    println("Done!")
-    println("Total module loading time: ${moduleLoading.stop()} seconds")
+    logger.info("Total module loading time: ${moduleLoading.stop()} seconds")
 }
