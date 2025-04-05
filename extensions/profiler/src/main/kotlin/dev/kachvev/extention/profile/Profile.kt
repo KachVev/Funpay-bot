@@ -1,5 +1,7 @@
 package dev.kachvev.extention.profile
 
+import java.util.*
+
 class Profiler(val profilerName: String) {
     var totalTime = 0L
         private set
@@ -14,11 +16,14 @@ class Profiler(val profilerName: String) {
         isRunning = true
     }
 
-    fun stop(): String {
+    fun stop(): Double {
         require(isRunning) { "$profilerName is not running." }
-        return "$profilerName took ${System.nanoTime() - startTime + totalTime}.ms".also {
-            isRunning = false
-            totalTime = System.nanoTime() - startTime + totalTime
+        val elapsedTime = System.nanoTime() - startTime + totalTime
+        isRunning = false
+        totalTime = elapsedTime
+
+        return (elapsedTime / 1_000_000_000.0).let {
+            String.format(Locale.US, "%.3f", it).toDouble()  // Используем три знака после запятой
         }
     }
 
@@ -30,6 +35,6 @@ class Profiler(val profilerName: String) {
             start()
         }
 
-        fun getProfileResult(graphName: String): String? = activeProfiles[graphName]?.stop()
+        fun getProfileResult(graphName: String): Double? = activeProfiles[graphName]?.stop()
     }
 }
